@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const dbUrl = require('./Models/urldb').dbUrl;
 const port = process.env.PORT || 8000;
-const instructor = require('./API/Routes/instructor');
+const auth = require('./API/Routes/auth');
 
 // Middleware
 app.use(express.json());
@@ -20,7 +20,7 @@ mongoose
 	.catch((err) => console.log('Error ', err));
 
 // Route
-app.use('/api/auth/instructor', instructor);
+app.use('/api/auth', auth);
 
 app.listen(port, (err) => {
 	if (err) {

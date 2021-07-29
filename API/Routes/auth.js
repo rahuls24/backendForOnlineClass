@@ -1,18 +1,18 @@
 const express = require('express');
 const route = express.Router();
-const Instructor = require('../../Models/instructor');
+const User = require('../../Models/users');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 // @type => POST
-// @route => "/api/auth/instructor/signup"
+// @route => "/api/auth/signup"
 // @desc => router for signup for User
 // @access => public
 
 route.post('/signup', (req, res) => {
-	Instructor.findOne({ email: req.body.email })
-		.then((instructor) => {
-			if (instructor) {
+	User.findOne({ email: req.body.email })
+		.then((user) => {
+			if (user) {
 				return res.json({
 					Error: `${req.body.email} already found, Please login with this email`,
 				});
@@ -20,7 +20,7 @@ route.post('/signup', (req, res) => {
 				if (req.body.password < 6) {
 					return res.json({ Error: 'Must have greater then 6 ' });
 				}
-				const newInstructor = new Instructor({
+				const newUser = new User({
 					name: req.body.name,
 					email: req.body.email,
 					password: req.body.password,
@@ -28,19 +28,19 @@ route.post('/signup', (req, res) => {
 				});
 				// encrypt the password
 				bcrypt.genSalt(saltRounds, (err, salt) => {
-					bcrypt.hash(newInstructor.password, salt, (err, hash) => {
+					bcrypt.hash(newUser.password, salt, (err, hash) => {
 						// Store hash in your password DB.
-						newInstructor.password = hash;
-						newInstructor
+						newUser.password = hash;
+						newUser
 							.save()
-							.then((instructor) => {
+							.then((user) => {
 								return res.json({
-									Greating: `Welcome ${instructor.name}`,
-									instructorData: instructor,
+									Greating: `Welcome ${user.name}`,
+									userData: user,
 								});
 							})
 							.catch((err) =>
-								console.log('error in saving the instructor in db', err),
+								console.log('error in saving the user in db', err),
 							);
 					});
 				});
@@ -48,7 +48,7 @@ route.post('/signup', (req, res) => {
 		})
 		.catch((err) =>
 			console.log(
-				'Error found in finding user in route /api/auth/instructor/signup',
+				'Error found in finding user in route /api/auth/user/signup',
 				err,
 			),
 		);
