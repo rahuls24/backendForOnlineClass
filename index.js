@@ -4,6 +4,7 @@ const keys = require('dotenv').config();
 const mongoose = require('mongoose');
 const port = process.env.PORT || 8000;
 const auth = require('./API/Routes/auth');
+const course = require('./API/Routes/courses');
 const passport = require('passport');
 
 //Check if keys are loaded from .env file
@@ -36,6 +37,7 @@ require('./strategies/jwtStrategy')(passport);
 
 // Route
 app.use('/api/auth', auth);
+app.use('/api/courses', course);
 
 app.listen(port, (err) => {
 	if (err) {

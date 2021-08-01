@@ -8,16 +8,15 @@ opts.secretOrKey = process.env.passportJwtKey;
 module.exports = (passport) => {
 	passport.use(
 		new JwtStrategy(opts, (jwt_payload, done) => {
-			User.findById({ id: jwt_payload.id }, (err, user) => {
-				if (err) {
-					return done(err, false);
-				}
-				if (user) {
-					return done(null, user);
-				} else {
-					return done(null, false);
-				}
-			});
+			User.findById(jwt_payload.data.id)
+				.then((user) => {
+					if (user) {
+						return done(null, user);
+					} else {
+						return done(null, false);
+					}
+				})
+				.catch((err) => console.log(err));
 		}),
 	);
 };

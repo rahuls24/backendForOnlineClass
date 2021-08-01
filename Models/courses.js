@@ -13,6 +13,7 @@ const Course = new Schema({
 	addedBy: {
 		type: Schema.Types.ObjectId,
 		ref: 'Users',
+		require: true,
 	},
 	enrolledBy: {
 		type: Number,
